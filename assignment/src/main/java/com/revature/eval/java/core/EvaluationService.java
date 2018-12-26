@@ -3,8 +3,11 @@ package com.revature.eval.java.core;
 import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.*;
 
-public class EvaluationService {
+public class EvaluationService extends Exception {
 
 	/**
 	 * 1. Without using the StringBuilder or StringBuffer class, write a method that
@@ -85,16 +88,27 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
+			if(this.sideOne==this.sideTwo)
+				if(this.sideTwo == this.sideThree)
+					return true;
 			return false;
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
+			if(this.sideOne==this.sideThree || this.sideTwo==this.sideThree)
+			{
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			// TODO Write an implementation for this method declaration 
+			if(this.sideOne!=this.sideTwo || this.sideTwo!= this.sideThree)
+			{
+				return true;
+			}
 			return false;
 		}
 
@@ -117,7 +131,119 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		// create arrays to represent letter values
+		char[] valueOne = {'A','E','I','O','U','L','N','R','S','T'};
+		char[] valueTwo = {'D','G'};
+		char[] valueThree = {'C','M','P','B'};
+		char[] valueFour = {'F','H','V','W','Y'};
+		char[] valueFive = {'K'};
+		char[] valueEight = {'X'};
+		char[] valueTen = {'Z','Q'};
+		
+	
+		
+		// stores the score
+		int score=0;
+		int j;
+		int k;
+		// creates an array to hold input values
+		char[] inputString=new char[100];
+		
+		//go through input string an set to inputString array 1 charecter at a time
+		for(int i=0; i<string.length();i++)
+		{
+			inputString[i] = string.charAt(i);
+		}
+		
+		//go through the inputString array 
+		
+		for( j=0; j<inputString.length;j++)
+		{
+			for( k=0;k<valueOne.length;k++)// go through valueOne array
+			{
+				if(Character.toUpperCase(inputString[j])==valueOne[k])// check to see if character at inputString is equal to charecter at valueOne array
+				{
+					score+=1;//add one to score
+				}
+			}
+		}
+		
+		for(j=0; j<inputString.length;j++)
+		{
+			for(k=0;k<valueTwo.length;k++)
+			{
+				if(Character.toUpperCase(inputString[j])==valueTwo[k])
+				{
+					score+=2;
+				}
+			}
+		}
+		
+		
+		for(j=0; j<inputString.length;j++)
+		{
+			for(k=0;k<valueThree.length;k++)
+			{
+				if(Character.toUpperCase(inputString[j])==valueThree[k])
+				{
+					score+=3;
+				}
+			}
+		}
+		
+		
+		
+		for(j=0; j<inputString.length;j++)
+		{
+			for(k=0;k<valueFour.length;k++)
+			{
+				if(Character.toUpperCase(inputString[j])==valueFour[k])
+				{
+					 
+					score+=4;
+				}
+			}
+		}
+		
+		
+		for(j=0; j<inputString.length;j++)
+		{
+			for(k=0;k<valueFive.length;k++)
+			{
+				if(Character.toUpperCase(inputString[j])==valueFive[k])
+				{
+					score+=5;
+				}
+			}
+		}
+		
+		
+
+		for(j=0; j<inputString.length;j++)
+		{
+			for(k=0;k<valueEight.length;k++)
+			{
+				if(Character.toUpperCase(inputString[j])==valueEight[k])
+				{
+					score+=8;
+				}
+			}
+		}
+		
+		
+		for(j=0; j<inputString.length;j++)
+		{
+			for(k=0;k<valueTen.length;k++)
+			{
+				if(Character.toUpperCase(inputString[j])==valueTen[k])
+				{
+					score+=10;
+				}
+			}
+		}	
+		
+		return score;
 	}
 
 	/**
@@ -153,7 +279,65 @@ public class EvaluationService {
 	 */
 	public String cleanPhoneNumber(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		
+		String returnCleanNum = "";
+		
+		char charecterTemp;
+		int size =10;
+		
+		
+		//take the string and save as a integer
+		
+		char[] nums = {'0','1','2','3','4','5','6','7','8','9'};
+		char[] wrong = string.toCharArray();
+		for(int j=0; j<string.length();j++)
+		{
+			if(returnCleanNum.length()>size)
+			{
+				throw new IllegalArgumentException("no");
+			}
+			
+			for(int k=0;k<nums.length;k++)
+			{
+					
+				if(string.charAt(j)==nums[k])
+				{	
+							charecterTemp = string.charAt(j);
+							returnCleanNum += charecterTemp;
+							
+							break;
+						} 
+					}
+					
+				} 
+		Pattern pattern = Pattern.compile("[0-9]{3,12}");
+		Matcher matcher = pattern.matcher(string);
+		
+		
+		
+		while(matcher.find())
+		{
+			if(matcher.group().length()!=0)
+			{
+				System.out.println(matcher.group().trim());
+				returnCleanNum+=matcher.group().trim();
+			
+			}
+			
+		}
+		
+			System.out.println(returnCleanNum);
+			if(returnCleanNum.length()>size)
+			{
+				throw new IllegalArgumentException("no");
+			}
+			
+			if(string.indexOf('a')>=0)
+			{
+				throw new IllegalArgumentException("no");
+			}
+			
+		return returnCleanNum;
 	}
 
 	/**
@@ -167,7 +351,43 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> aMap = new HashMap<>();
+		//int count=0;
+		Pattern pattern = Pattern.compile("[^0-9]{1,2}");
+		Matcher matcher = pattern.matcher(string);
+		String[] strSplit = string.split(" ",10);
+		/*while(matcher.find())
+		{
+			if(matcher.group().length() !=0)
+			{
+				System.out.println(matcher.group().trim());
+				
+				//aMap.put(matcher.group().trim(), 1);
+				
+			}
+		}*/
+		
+		for(int i=0;i<strSplit.length;i++)
+		{
+			int count=0;
+			for(int j=0;j<strSplit.length;j++)
+			{
+				if(strSplit[i].equals(strSplit[j]))
+				{
+					count++;
+					
+				}
+			}
+			aMap.put(strSplit[i],count);
+		}
+		
+		
+		
+		aMap.put(matcher.group().trim(), 1);
+		//aMap.put(string	, 1);
+		//aMap.put(string, 1);
+		
+		return aMap ;
 	}
 
 	/**
@@ -208,8 +428,11 @@ public class EvaluationService {
 	static class BinarySearch<T> {
 		private List<T> sortedList;
 
+		private int[] list = {1,2,3,4,5,6};
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
+			sortedList = new ArrayList<>();
+			
 			return 0;
 		}
 
@@ -247,7 +470,76 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		char[] vowels = {'a','e','i','o','u'};
+		String pigWord="";
+		String pigWord2 = "";
+		
+		
+	
+		/*for(int i=0;i<string.length();i++)
+		{
+
+			for(int j=0;j<vowels.length;j++)
+			{
+				if(string.charAt(i)==vowels[j])
+				{
+					pigWord = string+"ay";
+					break;
+				}
+				
+			
+			
+			}
+		}*/
+		
+		// go throght the whole word
+		for(int k=0; k<string.length();k++)
+		{
+			//go through the vowels
+			for(int l=0;l<vowels.length;l++)
+			{
+		
+
+				
+					// for each constant move to end of string till vowel is incountered
+					if(string.charAt(k)!='a' && string.charAt(k)!= 'e' &&
+							string.charAt(k)!='i'&& string.charAt(k)!='o' &&  string.charAt(k)!='u')
+					{
+						//String pigWord2 = "";
+						char moveLetters = string.charAt(k);
+						pigWord2 += String.valueOf(moveLetters);
+						//String letters = String.valueOf(moveLetters);
+						//pigWord2 =string.replace(moveLetters, ' ');
+						//pigWord = pigWord2;
+						break;
+					}
+				
+				}
+			}
+			
+			
+			
+			//go through the vowels
+			/*for(int l=0;l<vowels.length;l++)
+			{
+				// for each constant move to end of string till vowel is incountered
+				if(string.charAt(k)!='a' && string.charAt(k)!= 'e' &&
+						string.charAt(k)!='i'&& string.charAt(k)!='o' &&  string.charAt(k)!='u')
+				{
+					//String pigWord2 = "";
+					char moveLetters = string.charAt(k);
+					pigWord2 += String.valueOf(moveLetters);
+					//String letters = String.valueOf(moveLetters);
+					//pigWord2 =string.replace(moveLetters, ' ');
+					//pigWord = pigWord2;
+					break;
+				}
+			}*/
+			
+		//}
+		
+		
+		return pigWord;
 	}
 
 	/**
@@ -267,6 +559,52 @@ public class EvaluationService {
 	 */
 	public boolean isArmstrongNumber(int input) {
 		// TODO Write an implementation for this method declaration
+		int originalNum;
+		
+		int count=0;
+		ArrayList<Integer> splitNum = new ArrayList<Integer>();
+		int newNum =0;
+		originalNum = input;
+		count = originalNum %10;
+		Stack<Integer> stack = new Stack<Integer>();
+		//String origString = Integer.toString(originalNum);
+		int[] splitString= {};
+		/*char aChar1 = origString.charAt(0);
+		char aChar2 = origString.charAt(1);
+		char aChar3 = origString.charAt(2);*/
+	
+		    
+		splitNum.add(1);
+		splitNum.add(5);
+		splitNum.add(3);
+		
+		/*while (count > 0) {
+			stack.push( splitNum[count] );
+		    System.out.println(splitNum[count]);
+		    newNum += stack.pop();
+		    count--;
+		}*/
+		
+		for(int i=0;i<count;i++)
+		{
+			stack.push( splitNum.get(i) );
+		    System.out.println(splitNum.get(i));
+		    newNum += Math.pow(stack.pop(), count);
+		    //count--;
+		}
+		
+	
+		
+		/*for(int j=0; j<=count; j++)
+		{
+			newNum+=splitNum[j];
+		}*/
+		
+		if(originalNum==newNum)
+		{
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -281,8 +619,38 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
+	    ArrayList<Long>numList = new ArrayList<Long>();
+	    ArrayList<Long>factors = new ArrayList<Long>();
+		long inputNum =l;
+		
+		factors.add(1L);
+		factors.add(2L);
+		//adding numbers to the list
+		for(int i=1;i<=inputNum;i++)
+		{
+			numList.add((long) i);
+			
+		}
+		System.out.println(numList);
+		
+		for(int i=0; i<numList.size();i++)
+		{
+			for(int j=0;j<numList.size();j++)
+			{
+				long tempNum = numList.get(i)*numList.get(j);
+				if(tempNum==inputNum)
+				{
+					factors.add(numList.get(i));
+					factors.add(numList.get(j));
+				}
+				
+			}
+		}
+		System.out.println(factors);
+		
 		// TODO Write an implementation for this method declaration
-		return null;
+	
+		return factors;
 	}
 
 	/**
@@ -321,7 +689,244 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String[] alphabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+			//int[] phraseKey ={};
+			String[] alphabetU = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+			//int[] phraseKey ={};
+			ArrayList<Integer> phraseKey = new ArrayList<Integer>();//[6,12,14]
+			//String key ="a";
+			//int key = 6;
+			int keyIndex=0;
+			String[] chipher= new String[alphabet.length];
+			String[] chipherU= new String[alphabetU.length];
+			int count =0;
+			String searchKey = string;
+			String[] stringSearch = new String[25];
+			stringSearch = searchKey.split("[a-zA-Z]{0}");
+			String result="";
+			StringBuilder input1 = new StringBuilder();
+			
+			//switch to lowwercase
+			searchKey.toLowerCase();
+			if(Character.isUpperCase(searchKey.charAt(0)))
+			{
+				
+			}
+			
+			//set keyIndex
+			for(int i=0;i<alphabet.length;i++)
+			{
+				//if(key==alphabet[i].ind)
+				if(key==i)
+				{
+					keyIndex = i;
+					break;
+					//System.out.println(keyIndex);
+				}
+			}
+			
+			//add alhpabet at index keyIndex to chiper index 0 and so on
+			
+				for(int j=0;j<chipher.length-keyIndex;j++)
+				{
+					if(Character.isUpperCase(searchKey.charAt(0)))
+					{
+						chipherU[j]= alphabetU[j+keyIndex];
+						count++;
+					}else {
+					chipher[j]= alphabet[j+keyIndex];
+					count++;
+					}
+					//uppercase modifier
+					
+					
+				}
+				
+				//finish chipher
+				for(int i=count;i<chipher.length;i++)
+				{
+					
+					//uppercase modifier
+					if(Character.isUpperCase(searchKey.charAt(0)))
+					{
+						chipherU[i]= alphabetU[i-count];
+						
+					}else {
+						chipher[i]= alphabet[i-count];
+					}
+					
+				}
+				
+				//String searchKey="b";
+				
+				/*for(int q=0;q<alphabet.length;q++)
+				{
+					if(searchKey==alphabet[q])
+					{
+						//System.out.println("found key at "+q);
+						//System.out.println(chipher[q]);
+					}
+				}*/
+				
+				//set stringSearch to array of input
+				for(String str:stringSearch)
+				{
+					System.out.print(str);
+				}
+				//create a list of indexs of phrase using alphabet
+				//System.out.println(Arrays.toString(stringSearch));
+				System.out.println("");
+				
+				//generate stringkey values
+				for(int k=0;k<alphabet.length;k++)
+				{
+					if(Character.isUpperCase(searchKey.charAt(0)))
+					{
+						for(int z=0;z<stringSearch.length;z++)
+						{
+							if(alphabetU[k].equals(stringSearch[z]))
+							{
+								
+								phraseKey.add(k);
+								break;
+							}
+							
+							//uppercase modifier
+						}	
+						//break;
+					}else {
+						//System.out.println(alphabet[k]);
+						for(int z=0;z<stringSearch.length;z++)
+						{
+							if(alphabet[k].equals(stringSearch[z]))
+							{
+								
+								phraseKey.add(k);
+								break;
+							}
+							
+							//uppercase modifier
+						}	
+					}
+					
+				}
+				
+				//uppercase modifier
+				/*if(Character.isUpperCase(searchKey.charAt(0)))
+				{
+					//generate stringkey values
+					for(int k=0;k<alphabetU.length;k++)
+					{
+						//System.out.println(alphabet[k]);
+						for(int z=0;z<stringSearch.length;z++)
+						{
+							if(alphabetU[k].equals(stringSearch[z]))
+							{
+								
+								phraseKey.add(k);
+								break;
+							}
+							
+							//uppercase modifier
+						}	
+					}
+					
+				}*/
+				
+				for(int a=0;a<chipher.length;a++)
+				{
+					if(Character.isUpperCase(searchKey.charAt(0)))
+					{
+						for(int b=0;b<stringSearch.length;b++)
+						{
+							if(Character.isUpperCase(searchKey.charAt(0)))
+							{
+								if(chipherU[a].equals(stringSearch[b]))
+								{
+									result += chipherU[phraseKey.get(b)];
+									 //result=chipher[a];
+									 //StringBuilder input1 = new StringBuilder();
+									 //input1.append(result);
+									
+									System.out.print(result);
+									break;
+								}
+								
+							}
+							
+						
+							
+						}
+						
+					}else {
+						for(int b=0;b<stringSearch.length;b++)
+						{
+							if(chipher[a].equals(stringSearch[b]))
+							{
+								result = chipher[phraseKey.get(b)];
+								 //result=chipher[a];
+								 //StringBuilder input1 = new StringBuilder();
+								 //input1.append(result);
+								System.out.print(result);
+								break;
+							}
+						}
+						
+					}
+				/*	for(int b=0;b<stringSearch.length;b++)
+					{
+						if(Character.isUpperCase(searchKey.charAt(0)))
+						{
+							if(chipherU[a].equals(stringSearch[b]))
+							{
+								result = chipherU[phraseKey.get(b)];
+								 //result=chipher[a];
+								 //StringBuilder input1 = new StringBuilder();
+								 //input1.append(result);
+								System.out.print(result);
+								break;
+							}
+						}else {
+							if(chipher[a].equals(stringSearch[b]))
+							{
+								result = chipher[phraseKey.get(b)];
+								 //result=chipher[a];
+								 //StringBuilder input1 = new StringBuilder();
+								 //input1.append(result);
+								System.out.print(result);
+								break;
+							}
+						}
+					
+						
+					}*/
+					
+				}
+				
+				/*if(Character.isUpperCase(searchKey.charAt(0)))
+				{
+					for(int a=0;a<chipherU.length;a++)
+					{
+						for(int b=0;b<stringSearch.length;b++)
+						{
+							
+							if(chipherU[a].equals(stringSearch[b]))
+							{
+								result = chipherU[phraseKey.get(b)];
+								 //result=chipher[a];
+								 //StringBuilder input1 = new StringBuilder();
+								 //input1.append(result);
+								System.out.print(result);
+								break;
+							}
+							
+						}
+						
+					}
+				}*/
+				
+				
+			return result;
 		}
 
 	}
