@@ -1,8 +1,6 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.*;
@@ -280,64 +278,16 @@ public class EvaluationService extends Exception {
 	public String cleanPhoneNumber(String string) {
 		// TODO Write an implementation for this method declaration
 		
-		String returnCleanNum = "";
+		// string replace all 1st arg is regex ^ everything but these charecters.
+		String clean = string.replaceAll("[^0-9]", "");
 		
-		char charecterTemp;
-		int size =10;
-		
-		
-		//take the string and save as a integer
-		
-		char[] nums = {'0','1','2','3','4','5','6','7','8','9'};
-		char[] wrong = string.toCharArray();
-		for(int j=0; j<string.length();j++)
+		if(clean.length()!=10)
 		{
-			if(returnCleanNum.length()>size)
-			{
-				throw new IllegalArgumentException("no");
-			}
-			
-			for(int k=0;k<nums.length;k++)
-			{
-					
-				if(string.charAt(j)==nums[k])
-				{	
-							charecterTemp = string.charAt(j);
-							returnCleanNum += charecterTemp;
-							
-							break;
-						} 
-					}
-					
-				} 
-		Pattern pattern = Pattern.compile("[0-9]{3,12}");
-		Matcher matcher = pattern.matcher(string);
-		
-		
-		
-		while(matcher.find())
-		{
-			if(matcher.group().length()!=0)
-			{
-				System.out.println(matcher.group().trim());
-				returnCleanNum+=matcher.group().trim();
-			
-			}
-			
+			throw new IllegalArgumentException();
 		}
-		
-			System.out.println(returnCleanNum);
-			if(returnCleanNum.length()>size)
-			{
-				throw new IllegalArgumentException("no");
-			}
+
 			
-			if(string.indexOf('a')>=0)
-			{
-				throw new IllegalArgumentException("no");
-			}
-			
-		return returnCleanNum;
+		return clean;
 	}
 
 	/**
@@ -352,40 +302,22 @@ public class EvaluationService extends Exception {
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
 		Map<String, Integer> aMap = new HashMap<>();
-		//int count=0;
-		Pattern pattern = Pattern.compile("[^0-9]{1,2}");
-		Matcher matcher = pattern.matcher(string);
-		String[] strSplit = string.split(" ",10);
-		/*while(matcher.find())
-		{
-			if(matcher.group().length() !=0)
-			{
-				System.out.println(matcher.group().trim());
-				
-				//aMap.put(matcher.group().trim(), 1);
-				
-			}
-		}*/
+		
+	
+		String[] strSplit = string.split(",?[^a-zA-Z]");	
 		
 		for(int i=0;i<strSplit.length;i++)
 		{
-			int count=0;
-			for(int j=0;j<strSplit.length;j++)
+			
+			//aMap.put(strSplit[i]);
+			if(aMap.containsKey(strSplit[i]))
 			{
-				if(strSplit[i].equals(strSplit[j]))
-				{
-					count++;
-					
-				}
+				aMap.replace(strSplit[i], aMap.get(strSplit[i])+1);
+			}else {
+				aMap.put(strSplit[i], 1);
 			}
-			aMap.put(strSplit[i],count);
 		}
 		
-		
-		
-		aMap.put(matcher.group().trim(), 1);
-		//aMap.put(string	, 1);
-		//aMap.put(string, 1);
 		
 		return aMap ;
 	}
@@ -470,76 +402,43 @@ public class EvaluationService extends Exception {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
-		char[] vowels = {'a','e','i','o','u'};
-		String pigWord="";
-		String pigWord2 = "";
+		String[] wordSplit = string.split(" ");
+		int indexPosition = 0;
+		String result ="";
 		
+		//String[] vowels = {"a","e","i','o','u'};
 		
-	
-		/*for(int i=0;i<string.length();i++)
+		for(int i=0;i<wordSplit.length;i++)
 		{
-
-			for(int j=0;j<vowels.length;j++)
+			if(wordSplit[i].substring(0, 2).compareToIgnoreCase("qu")==0)
 			{
-				if(string.charAt(i)==vowels[j])
+				wordSplit[i]=wordSplit[i].substring(2)+"quay";
+			}else {
+				for(int j=0;j<wordSplit[i].length();j++)
 				{
-					pigWord = string+"ay";
-					break;
-				}
-				
-			
-			
-			}
-		}*/
-		
-		// go throght the whole word
-		for(int k=0; k<string.length();k++)
-		{
-			//go through the vowels
-			for(int l=0;l<vowels.length;l++)
-			{
-		
-
-				
-					// for each constant move to end of string till vowel is incountered
-					if(string.charAt(k)!='a' && string.charAt(k)!= 'e' &&
-							string.charAt(k)!='i'&& string.charAt(k)!='o' &&  string.charAt(k)!='u')
+					if(wordSplit[i].substring(j,j+1).matches("[aeiouAEIOU]"))
 					{
-						//String pigWord2 = "";
-						char moveLetters = string.charAt(k);
-						pigWord2 += String.valueOf(moveLetters);
-						//String letters = String.valueOf(moveLetters);
-						//pigWord2 =string.replace(moveLetters, ' ');
-						//pigWord = pigWord2;
+						indexPosition = j;
 						break;
 					}
-				
 				}
+				wordSplit[i] = wordSplit[i].substring(indexPosition)+wordSplit[i].substring(0,indexPosition)+"ay";
 			}
-			
-			
-			
-			//go through the vowels
-			/*for(int l=0;l<vowels.length;l++)
+			// bring spaces back
+			if(wordSplit.length == 1)
 			{
-				// for each constant move to end of string till vowel is incountered
-				if(string.charAt(k)!='a' && string.charAt(k)!= 'e' &&
-						string.charAt(k)!='i'&& string.charAt(k)!='o' &&  string.charAt(k)!='u')
-				{
-					//String pigWord2 = "";
-					char moveLetters = string.charAt(k);
-					pigWord2 += String.valueOf(moveLetters);
-					//String letters = String.valueOf(moveLetters);
-					//pigWord2 =string.replace(moveLetters, ' ');
-					//pigWord = pigWord2;
-					break;
-				}
-			}*/
-			
-		//}
+				result = result+wordSplit[i];
+				System.out.println("here");
+			}else {
+			result = result+wordSplit[i]+" ";
+			}
+			System.out.println(wordSplit[0].length());
+		}
 		
+
+//		
 		
-		return pigWord;
+		return result;
 	}
 
 	/**
@@ -562,43 +461,35 @@ public class EvaluationService extends Exception {
 		int originalNum;
 		
 		int count=0;
-		ArrayList<Integer> splitNum = new ArrayList<Integer>();
+		ArrayList<Integer> numList = new ArrayList<Integer>();
+		String splitNum="";
+		splitNum.matches("[0-9]");
 		int newNum =0;
 		originalNum = input;
 		count = originalNum %10;
 		Stack<Integer> stack = new Stack<Integer>();
-		//String origString = Integer.toString(originalNum);
-		int[] splitString= {};
-		/*char aChar1 = origString.charAt(0);
-		char aChar2 = origString.charAt(1);
-		char aChar3 = origString.charAt(2);*/
-	
-		    
-		splitNum.add(1);
-		splitNum.add(5);
-		splitNum.add(3);
 		
-		/*while (count > 0) {
-			stack.push( splitNum[count] );
-		    System.out.println(splitNum[count]);
-		    newNum += stack.pop();
-		    count--;
-		}*/
+		int[] splitString= {};
+		
+		    
+		numList.add(Integer.parseInt(splitNum));
+		numList.add(Integer.parseInt(splitNum));
+		numList.add(Integer.parseInt(splitNum));
+		
+		
+		
 		
 		for(int i=0;i<count;i++)
 		{
-			stack.push( splitNum.get(i) );
-		    System.out.println(splitNum.get(i));
+			stack.push( numList.get(i) );
+		   
 		    newNum += Math.pow(stack.pop(), count);
-		    //count--;
+		   
 		}
 		
 	
 		
-		/*for(int j=0; j<=count; j++)
-		{
-			newNum+=splitNum[j];
-		}*/
+	
 		
 		if(originalNum==newNum)
 		{
@@ -619,38 +510,30 @@ public class EvaluationService extends Exception {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-	    ArrayList<Long>numList = new ArrayList<Long>();
-	    ArrayList<Long>factors = new ArrayList<Long>();
-		long inputNum =l;
 		
-		factors.add(1L);
-		factors.add(2L);
-		//adding numbers to the list
-		for(int i=1;i<=inputNum;i++)
+		ArrayList<Long> result = new ArrayList<Long>();
+		long i = 0;
+		//start at 2 cause 1 is not a factor
+		for(i=2;i<=l;i++)
 		{
-			numList.add((long) i);
 			
-		}
-		System.out.println(numList);
-		
-		for(int i=0; i<numList.size();i++)
-		{
-			for(int j=0;j<numList.size();j++)
+			if(l%i==0)
 			{
-				long tempNum = numList.get(i)*numList.get(j);
-				if(tempNum==inputNum)
-				{
-					factors.add(numList.get(i));
-					factors.add(numList.get(j));
-				}
+				long temp = l/i;
+				
+						
+						result.add(temp);
+						l=i;
+						i--;
+
 				
 			}
+			
 		}
-		System.out.println(factors);
-		
+
 		// TODO Write an implementation for this method declaration
 	
-		return factors;
+		return result;
 	}
 
 	/**
@@ -708,10 +591,7 @@ public class EvaluationService extends Exception {
 			
 			//switch to lowwercase
 			searchKey.toLowerCase();
-			if(Character.isUpperCase(searchKey.charAt(0)))
-			{
-				
-			}
+		
 			
 			//set keyIndex
 			for(int i=0;i<alphabet.length;i++)
@@ -757,25 +637,12 @@ public class EvaluationService extends Exception {
 					
 				}
 				
-				//String searchKey="b";
-				
-				/*for(int q=0;q<alphabet.length;q++)
-				{
-					if(searchKey==alphabet[q])
-					{
-						//System.out.println("found key at "+q);
-						//System.out.println(chipher[q]);
-					}
-				}*/
-				
 				//set stringSearch to array of input
 				for(String str:stringSearch)
 				{
-					System.out.print(str);
+					//System.out.print(str);
 				}
-				//create a list of indexs of phrase using alphabet
-				//System.out.println(Arrays.toString(stringSearch));
-				System.out.println("");
+				
 				
 				//generate stringkey values
 				for(int k=0;k<alphabet.length;k++)
@@ -811,27 +678,7 @@ public class EvaluationService extends Exception {
 					
 				}
 				
-				//uppercase modifier
-				/*if(Character.isUpperCase(searchKey.charAt(0)))
-				{
-					//generate stringkey values
-					for(int k=0;k<alphabetU.length;k++)
-					{
-						//System.out.println(alphabet[k]);
-						for(int z=0;z<stringSearch.length;z++)
-						{
-							if(alphabetU[k].equals(stringSearch[z]))
-							{
-								
-								phraseKey.add(k);
-								break;
-							}
-							
-							//uppercase modifier
-						}	
-					}
-					
-				}*/
+				
 				
 				for(int a=0;a<chipher.length;a++)
 				{
@@ -844,11 +691,7 @@ public class EvaluationService extends Exception {
 								if(chipherU[a].equals(stringSearch[b]))
 								{
 									result += chipherU[phraseKey.get(b)];
-									 //result=chipher[a];
-									 //StringBuilder input1 = new StringBuilder();
-									 //input1.append(result);
 									
-									System.out.print(result);
 									break;
 								}
 								
@@ -864,66 +707,16 @@ public class EvaluationService extends Exception {
 							if(chipher[a].equals(stringSearch[b]))
 							{
 								result = chipher[phraseKey.get(b)];
-								 //result=chipher[a];
-								 //StringBuilder input1 = new StringBuilder();
-								 //input1.append(result);
-								System.out.print(result);
+							
 								break;
 							}
 						}
 						
 					}
-				/*	for(int b=0;b<stringSearch.length;b++)
-					{
-						if(Character.isUpperCase(searchKey.charAt(0)))
-						{
-							if(chipherU[a].equals(stringSearch[b]))
-							{
-								result = chipherU[phraseKey.get(b)];
-								 //result=chipher[a];
-								 //StringBuilder input1 = new StringBuilder();
-								 //input1.append(result);
-								System.out.print(result);
-								break;
-							}
-						}else {
-							if(chipher[a].equals(stringSearch[b]))
-							{
-								result = chipher[phraseKey.get(b)];
-								 //result=chipher[a];
-								 //StringBuilder input1 = new StringBuilder();
-								 //input1.append(result);
-								System.out.print(result);
-								break;
-							}
-						}
+				
 					
-						
-					}*/
 					
 				}
-				
-				/*if(Character.isUpperCase(searchKey.charAt(0)))
-				{
-					for(int a=0;a<chipherU.length;a++)
-					{
-						for(int b=0;b<stringSearch.length;b++)
-						{
-							
-							if(chipherU[a].equals(stringSearch[b]))
-							{
-								result = chipherU[phraseKey.get(b)];
-								 //result=chipher[a];
-								 //StringBuilder input1 = new StringBuilder();
-								 //input1.append(result);
-								System.out.print(result);
-								break;
-							}
-							
-						}
-						
-					}
-				}*/
 				
 				
 			return result;
@@ -982,7 +775,61 @@ public class EvaluationService extends Exception {
 		 */
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			ArrayList<Character> encrypted = new ArrayList<Character>();
+			//char[]encrypted={};
+			char[] alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m',
+								 'n','o','p','q','r','s','t','u','v','w','x','y','z'};
+			char[] decodeAlphabet = {'z','y','x','w','v','u','t','s','r','q','p','o','n',
+					 'm','l','k','j','i','h','g','f','e','d','c','b','a'};
+			int count =0;
+			int offset=0;
+			ArrayList<Character>deCriptArr= new ArrayList<Character>();
+			String decrypted="";
+			ArrayList<Integer> decriptMap =new ArrayList<Integer>();
+			
+			// TODO Write an implementation for this method declaration
+			
+			//create an array using string
+			for(int i=0;i<string.length();i++)
+			{
+				
+				encrypted.add(string.charAt(i));
+			}
+			
+			// go through alphabet array
+			for(int i=0;i<encrypted.size();i++)
+			{
+				//check to see if the encrypted charecter is equal to the alphabet
+				for(int j=0;j<alphabet.length;j++)
+				{
+					if(encrypted.get(i)==alphabet[j])
+					{
+						count = j;
+						decriptMap.add(count);
+						//System.out.println(alphabet[i]);
+						//System.out.println(j);
+					}	
+				}
+
+			}
+			
+			//get the offest number 
+			for(int j=count;j<alphabet.length-1;j++){
+				offset++;
+			}
+			//System.out.println(offset);
+			
+			//get decryption
+			for(int j=0;j<decriptMap.size();j++)
+			{
+					deCriptArr.add(decodeAlphabet[decriptMap.get(j)]);
+					decrypted+=deCriptArr.get(j);
+			}
+			Pattern pattern = Pattern.compile("[a-z]{3,4}+\\s+[a-z]{3,4}\\w[a-z]{3,5}");
+			Matcher matcher = pattern.matcher(decrypted);
+			
+
+			return decrypted;
 		}
 
 		/**
@@ -993,7 +840,9 @@ public class EvaluationService extends Exception {
 		 */
 		public static String decode(String string) {
 			// TODO Write an implementation for this method declaration
+			
 			return null;
+			
 		}
 	}
 
@@ -1021,7 +870,47 @@ public class EvaluationService extends Exception {
 	 */
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
+		String ISBN;
+		int[] numFormat = new int[10];
+		List<String> stringArr = new ArrayList<String>();
+		
+		int result;
+		ISBN = string;
+		Pattern pattern = Pattern.compile("[^-A-Z]");
+		Matcher matcher = pattern.matcher(ISBN);
+		
+		while(matcher.find())
+		{
+			if(matcher.group().length() !=0)
+			{
+				
+				stringArr.add(matcher.group().trim());
+			}
+		}
+		// convert string to array of numbers
+		
+		for(int i=0;i<stringArr.size();i++)
+		{
+			numFormat[i] = Integer.parseInt(stringArr.get(i));
+		}
+		//x1 * 10 + x2 * 9 + x3 * 8 + x4 * 7 + x5 * 6 + x6 * 5 + x7 * 4 + x8 * 3 + x9
+		 // * 2 + x10 * 1
+		result = checkExpression(numFormat[0],numFormat[1],numFormat[2],numFormat[3],numFormat[4],
+				numFormat[5],numFormat[6],numFormat[7],numFormat[8],numFormat[9]);
+		if(result==0)
+		{
+			//System.out.println("is valid isbn");
+			return true;
+		}
+		
+		//System.out.println(numFormat);
 		return false;
+	}
+	
+	public  int checkExpression(int x1,int x2, int x3,int x4,int x5,int x6,int x7,int x8,int x9, int x10)
+	{
+		int value = (x1*10 + x2*9 + x3*8 + x4*7 +x5*6+ x6*5 + x7*4 + x8*3 + x9*2 + x10*1)%11;
+		return value;
 	}
 
 	/**
@@ -1039,7 +928,28 @@ public class EvaluationService extends Exception {
 	 */
 	public boolean isPangram(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		//
+		StringBuilder sb = new StringBuilder();
+	
+		// go through the length of the input string
+		for(int i=0;i<string.length();i++)
+		{
+			//string.substring starts t first index but second argugment never goes out of bound
+			String cur = string.substring(i, i+1);
+			//if the string matches charecters without spaces
+			if(cur.matches("[a-zA-Z]"))
+			{
+				//string builder index of string == -1 if theres something that already in string builder
+				if(sb.indexOf(cur)==-1)
+				{
+					sb.append(cur);
+				}
+			}
+			
+		}
+		
+		
+		return sb.length()==26;
 	}
 
 	/**
@@ -1050,10 +960,10 @@ public class EvaluationService extends Exception {
 	 * @param given
 	 * @return
 	 */
-	public Temporal getGigasecondDate(Temporal given) {
+	/*public Temporal getGigasecondDate(Temporal given) {
 		// TODO Write an implementation for this method declaration
 		return null;
-	}
+	}*/
 
 	/**
 	 * 18. Given a number, find the sum of all the unique multiples of particular
@@ -1143,6 +1053,7 @@ public class EvaluationService extends Exception {
 	 */
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
+		
 		return 0;
 	}
 
